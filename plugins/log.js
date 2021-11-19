@@ -11,7 +11,7 @@ module.exports = function(multimeter) {
   multimeter.console.on("addLines", function(event) {
     const shard = event.shard ? `[${event.shard}] ` : '';
     const msg = new Date().toISOString() + ": " + shard + event.line + "\n";
-    if (event.type === "log") {
+    if (event.type === "log" || event.type === "result") {
       logFile.write(msg);
     } else if (event.type === "error") {
       errorLogFile.write(msg);
