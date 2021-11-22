@@ -38,7 +38,7 @@ class Gauges extends blessed.layout {
             parent: this,
             top: 0,
             height: 1,
-            width: '50%',
+            width: '40%',
             style: { inverse: true },
         });
 
@@ -46,7 +46,15 @@ class Gauges extends blessed.layout {
             parent: this,
             top: 0,
             height: 1,
-            width: '50%',
+            width: '40%',
+            style: { inverse: true },
+        });
+
+        let tick_box = blessed.box({
+            parent: this,
+            top: 0,
+            height: 1,
+            width: '20%',
             style: { inverse: true },
         });
 
@@ -89,6 +97,16 @@ class Gauges extends blessed.layout {
             bch: ' ',
             style: { inverse: true, bar: { inverse: true } },
         });
+
+        this.tickLabel = blessed.text({
+            parent: tick_box,
+            top: 0,
+            left: 0,
+            height: 1,
+            width: 14,
+            content: 'Tick: ...',
+            style: { inverse: true },
+        });
     }
 
     update(cpu_current, cpu_limit, mem_current, mem_limit) {
@@ -105,6 +123,11 @@ class Gauges extends blessed.layout {
             printf('Mem: %4dK/%4dK', mem_current / 1024, mem_limit / 1024),
         );
         this.memBar.setProgress((mem_current / mem_limit) * 100);
+        this.screen.render();
+    }
+
+    updateTick(tick) {
+        this.tickLabel.setContent(`Tick: ${tick || '...'}`);
         this.screen.render();
     }
 }
@@ -246,6 +269,11 @@ module.exports = class Multimeter extends EventEmitter {
                 (shard) => userInfo.cpuShard[shard] > 0,
             );
             this.console.setShard(this.shard);
+
+            this.api.socket.subscribe(`room:${this.shard}/W1N1`, (event) => {
+                var { data } = event;
+                this.gauges.updateTick(data.gameTime);
+            });
         } else {
             // Private server (no shard names)
             // NOTE: Uses a different memory path with the shard name omitted entirely
@@ -253,6 +281,11 @@ module.exports = class Multimeter extends EventEmitter {
             this.shards = [''];
             // Show server name instead
             this.console.setShard(`[${serverName}]`);
+
+            this.api.socket.subscribe('room:W1N1', (event) => {
+                var { data } = event;
+                this.gauges.updateTick(data.gameTime);
+            });
         }
 
         this.api.socket.subscribe('console', (event) => {
@@ -275,6 +308,7 @@ module.exports = class Multimeter extends EventEmitter {
                 this.cpuLimit,
                 data.memory,
                 this.memoryLimit,
+                this.tick,
             );
         });
 
