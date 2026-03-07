@@ -133,6 +133,8 @@ class Gauges extends blessed.layout {
 }
 
 module.exports = class Multimeter extends EventEmitter {
+    _shard;
+
     constructor(configManager) {
         super();
         this.configManager = configManager;
@@ -141,7 +143,7 @@ module.exports = class Multimeter extends EventEmitter {
         this.cpuLimit = 1;
         this.memoryLimit = 2097152;
         this.statusHandlers = [];
-        this.shard = '';
+        this._shard = '';
         this.shards = [];
 
         this.addCommand('help', {
@@ -268,24 +270,11 @@ module.exports = class Multimeter extends EventEmitter {
                 shards,
                 (shard) => userInfo.cpuShard[shard] > 0,
             );
-            this.console.setShard(this.shard);
-
-            this.api.socket.subscribe(`room:${this.shard}/W1N1`, (event) => {
-                var { data } = event;
-                this.gauges.updateTick(data.gameTime);
-            });
         } else {
             // Private server (no shard names)
             // NOTE: Uses a different memory path with the shard name omitted entirely
             this.shard = '';
             this.shards = [''];
-            // Show server name instead
-            this.console.setShard(`[${serverName}]`);
-
-            this.api.socket.subscribe('room:W1N1', (event) => {
-                var { data } = event;
-                this.gauges.updateTick(data.gameTime);
-            });
         }
 
         this.api.socket.subscribe('console', (event) => {
@@ -327,6 +316,42 @@ module.exports = class Multimeter extends EventEmitter {
                 this.memLimit = 2097152;
             });
         });
+    }
+
+    get shard() {
+        return this._shard;
+    }
+
+    set shard(shard) {
+        const oldShard = this._shard;
+        this._shard = shard;
+
+        // Single-shard server, show server name instead
+        this.console.setShard(
+            shard !== '' ? shard : `[${this.configManager.serverName}]`,
+        );
+        this.registerTickListener(oldShard);
+    }
+
+    async registerTickListener(oldShard) {
+        const oldSub = oldShard !== '' ? `room:${oldShard}/W1N1` : 'room:W1N1';
+        const newSub =
+            this.shard !== '' ? `room:${this.shard}/W1N1` : 'room:W1N1';
+        if (oldSub === newSub) return;
+        await this.api.socket.unsubscribe(oldSub);
+        this.console.addLines(
+            'system',
+            `unregistering old: ${oldSub}, ${JSON.stringify(this.api.socket.__subs)}`,
+        );
+        await this.api.socket.subscribe(newSub, (event) => {
+            var { data } = event;
+            this.console.addLines('system', `tick event: ${data.gameTime}`);
+            this.gauges.updateTick(data.gameTime);
+        });
+        this.console.addLines(
+            'system',
+            `registering new: ${newSub}, ${JSON.stringify(this.api.socket.__subs)}`,
+        );
     }
 
     disconnect() {
