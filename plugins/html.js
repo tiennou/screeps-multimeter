@@ -43,11 +43,16 @@ function parseLogHtml(line) {
   }
   function traverseNodes(nodes) {
     for (let node of nodes) {
-      let styles = null;
+      const styles = [];
       if (node.attrs) {
         for (let attr of node.attrs) {
-          if (attr.name === 'style') {
-            styles = parseStyle(attr.value);
+          if (attr.name === "style") {
+            styles.push(...parseStyle(attr.value));
+            for (let style of styles) {
+              output += `{${style}}`;
+            }
+          } else if (attr.name === "color") {
+            styles.push(`${attr.value}-fg`);
             for (let style of styles) {
               output += `{${style}}`;
             }
@@ -60,10 +65,8 @@ function parseLogHtml(line) {
       if (node.childNodes) {
         traverseNodes(node.childNodes);
       }
-      if (styles) {
-        for (let style of styles.reverse()) {
-          output += `{/${style}}`;
-        }
+      for (let style of styles.reverse()) {
+        output += `{/${style}}`;
       }
     }
   }
