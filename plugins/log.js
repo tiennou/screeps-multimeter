@@ -1,20 +1,20 @@
-const fs = require("fs");
+const fs = require('fs');
 
-module.exports = function(multimeter) {
-  let log = multimeter.config.logFilename;
-  if (!log) return;
-  let errorLog = log || multimeter.config.errorLogFilename;
+module.exports = function (multimeter) {
+    let log = multimeter.config.logFilename;
+    if (!log) return;
+    let errorLog = log || multimeter.config.errorLogFilename;
 
-  const logFile = fs.createWriteStream(log, { flags: "a" });
-  const errorLogFile = fs.createWriteStream(errorLog, { flags: "a" });
+    const logFile = fs.createWriteStream(log, { flags: 'a' });
+    const errorLogFile = fs.createWriteStream(errorLog, { flags: 'a' });
 
-  multimeter.console.on("addLines", function(event) {
-    const shard = event.shard ? `[${event.shard}] ` : '';
-    const msg = new Date().toISOString() + ": " + shard + event.line + "\n";
-    if (event.type === "log" || event.type === "result") {
-      logFile.write(msg);
-    } else if (event.type === "error") {
-      errorLogFile.write(msg);
-    }
-  });
+    multimeter.console.on('addLines', function (event) {
+        const shard = event.shard ? `[${event.shard}] ` : '';
+        const msg = new Date().toISOString() + ': ' + shard + event.line + '\n';
+        if (event.type === 'log' || event.type === 'result') {
+            logFile.write(msg);
+        } else if (event.type === 'error') {
+            errorLogFile.write(msg);
+        }
+    });
 };

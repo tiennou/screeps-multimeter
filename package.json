@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "test": "mocha test/*",
-    "check-prettier": "prettier -l 'plugins/**/*.js' 'src/**/*.js' 'bin/multimeter'"
+    "prettier": "prettier -w 'plugins/**/*.js' 'src/**/*.js' 'bin/multimeter'"
   },
   "dependencies": {
     "blessed": "^0.1.81",

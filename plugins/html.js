@@ -1,74 +1,75 @@
 const parse5 = require('parse5');
 
-module.exports = function(multimeter) {
-  multimeter.console.on("addLines", function(event) {
-    if (event.type === "log" || event.type === "result") {
-      event.line = parseLogHtml(event.line);
-      event.formatted = true;
-    }
-  });
+module.exports = function (multimeter) {
+    multimeter.console.on('addLines', function (event) {
+        if (event.type === 'log' || event.type === 'result') {
+            event.line = parseLogHtml(event.line);
+            event.formatted = true;
+        }
+    });
 };
 
 function parseLogHtml(line) {
-  let output = '';
-  let nodes = parse5.parse('<body>' + line + '</body>').childNodes[0].childNodes[1].childNodes;
-  function parseStyle(style) {
-    let styles = [];
-    for (let entry of style.split(';')) {
-      let parts = entry.split(':');
-      if (parts.length >= 2) {
-        let key = parts[0].trim();
-        let value = parts[1].trim();
-        switch (key) {
-          case 'color':
-            styles.push(value + '-fg');
-            break;
-          case 'background':
-            styles.push(value + '-bg');
-            break;
-          case 'font-weight':
-            if (value === 'bold') {
-              styles.push('bold');
+    let output = '';
+    let nodes = parse5.parse('<body>' + line + '</body>').childNodes[0]
+        .childNodes[1].childNodes;
+    function parseStyle(style) {
+        let styles = [];
+        for (let entry of style.split(';')) {
+            let parts = entry.split(':');
+            if (parts.length >= 2) {
+                let key = parts[0].trim();
+                let value = parts[1].trim();
+                switch (key) {
+                    case 'color':
+                        styles.push(value + '-fg');
+                        break;
+                    case 'background':
+                        styles.push(value + '-bg');
+                        break;
+                    case 'font-weight':
+                        if (value === 'bold') {
+                            styles.push('bold');
+                        }
+                        break;
+                    case 'text-decoration':
+                        if (value === 'underline') {
+                            styles.push('underline');
+                        }
+                        break;
+                }
             }
-            break;
-          case 'text-decoration':
-            if (value === 'underline') {
-              styles.push('underline');
-            }
-            break;
         }
-      }
+        return styles;
     }
-    return styles;
-  }
-  function traverseNodes(nodes) {
-    for (let node of nodes) {
-      const styles = [];
-      if (node.attrs) {
-        for (let attr of node.attrs) {
-          if (attr.name === "style") {
-            styles.push(...parseStyle(attr.value));
-            for (let style of styles) {
-              output += `{${style}}`;
+    function traverseNodes(nodes) {
+        for (let node of nodes) {
+            const styles = [];
+            if (node.attrs) {
+                for (let attr of node.attrs) {
+                    if (attr.name === 'style') {
+                        styles.push(...parseStyle(attr.value));
+                        for (let style of styles) {
+                            output += `{${style}}`;
+                        }
+                    } else if (attr.name === 'color') {
+                        const style = `${attr.value}-fg`;
+                        styles.push(style);
+                        output += `{${style}}`;
+                    }
+                }
             }
-          } else if (attr.name === "color") {
-            const style = `${attr.value}-fg`;
-            styles.push(style);
-            output += `{${style}}`;
-          }
+            if (node.nodeName === '#text') {
+                output += node.value;
+            }
+            if (node.childNodes) {
+                traverseNodes(node.childNodes);
+            }
+            for (let style of styles.reverse()) {
+                output += `{/${style}}`;
+            }
         }
-      }
-      if (node.nodeName === '#text') {
-        output += node.value;
-      }
-      if (node.childNodes) {
-        traverseNodes(node.childNodes);
-      }
-      for (let style of styles.reverse()) {
-        output += `{/${style}}`;
-      }
     }
-  }
-  traverseNodes(nodes);
-  return output;
+    traverseNodes(nodes);
+    return output;
 }
