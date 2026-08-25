@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.3.0] - 2026-08-25
+
+- Update to screeps-api 2.x
+
 ## [2.2.0] - 2026-08-25
 
 - Fixed directory path handling when loading plugins (thanks @tiennou)
