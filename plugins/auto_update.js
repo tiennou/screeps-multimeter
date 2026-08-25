@@ -3,7 +3,7 @@ const _ = require("lodash");
 const semver = require("semver");
 
 const RELEASES_URI =
-  "https://api.github.com/repos/CGamesPlay/screeps-multimeter/releases";
+  "https://api.github.com/repos/screepers/screeps-multimeter/releases";
 const USER_AGENT = "screeps-multiplayer auto-updater";
 const VERSION = require("../package.json").version;
 

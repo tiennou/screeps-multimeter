@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CGamesPlay/screeps-multimeter.git"
+    "url": "git+https://github.com/screepers/screeps-multimeter.git"
   },
   "keywords": [
     "screeps"
@@ -20,9 +20,9 @@
   "author": "Ryan Patterson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CGamesPlay/screeps-multimeter/issues"
+    "url": "https://github.com/screepers/screeps-multimeter/issues"
   },
-  "homepage": "https://github.com/CGamesPlay/screeps-multimeter#readme",
+  "homepage": "https://github.com/screepers/screeps-multimeter#readme",
   "dependencies": {
     "blessed": "^0.1.81",
     "dashdash": "^2.0.0",
