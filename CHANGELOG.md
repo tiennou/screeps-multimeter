@@ -1,6 +1,14 @@
 # Changelog
 
-## [Unreleased]
+## [2.2.0] - 2026-08-25
+
+- Fixed directory path handling when loading plugins (thanks @tiennou)
+- Handle `color` attribute of `<font>` tags (thanks @tiennou)
+- Include ad-hoc command results in log file (thanks @tomekbielaszewski)
+- Added JSON formatting plugin (thanks @tomekbielaszewski)
+  - This is disabled by default, add `json: true` to your config to enable it
+
+## [2.1.1] - 2023-06-08
 
 - Fixed missing '>>>' prefix for result messages
 - Added shard name to multimeter.log output
