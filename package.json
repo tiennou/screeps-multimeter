@@ -2,27 +2,23 @@
   "name": "screeps-multimeter",
   "version": "2.2.0",
   "description": "The most useful tool on your screeps workbench.",
-  "main": "index.js",
-  "bin": {
-    "multimeter": "./bin/multimeter"
-  },
-  "scripts": {
-    "test": "mocha test/*",
-    "check-prettier": "prettier -l 'plugins/**/*.js' 'src/**/*.js' 'bin/multimeter'"
-  },
+  "keywords": [
+    "screeps"
+  ],
+  "homepage": "https://github.com/screepers/screeps-multimeter#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/screepers/screeps-multimeter.git"
   },
-  "keywords": [
-    "screeps"
-  ],
-  "author": "Ryan Patterson",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/screepers/screeps-multimeter/issues"
   },
-  "homepage": "https://github.com/screepers/screeps-multimeter#readme",
+  "author": "Ryan Patterson",
+  "license": "MIT",
+  "main": "index.js",
+  "bin": {
+    "multimeter": "./bin/multimeter"
+  },
   "files": [
     "CHANGELOG.md",
     "bin",
@@ -32,6 +28,10 @@
     "src",
     "test"
   ],
+  "scripts": {
+    "test": "mocha test/*",
+    "check-prettier": "prettier -l 'plugins/**/*.js' 'src/**/*.js' 'bin/multimeter'"
+  },
   "dependencies": {
     "blessed": "^0.1.81",
     "dashdash": "^2.0.0",
