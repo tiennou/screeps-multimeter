@@ -52,10 +52,9 @@ function parseLogHtml(line) {
               output += `{${style}}`;
             }
           } else if (attr.name === "color") {
-            styles.push(`${attr.value}-fg`);
-            for (let style of styles) {
-              output += `{${style}}`;
-            }
+            const style = `${attr.value}-fg`;
+            styles.push(style);
+            output += `{${style}}`;
           }
         }
       }
