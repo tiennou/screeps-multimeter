@@ -94,7 +94,6 @@ class UnifiedConfig {
      * Create a new config file.
      */
     async createConfig(file, config) {
-        let serverConfig = config.server;
         let mmConfig = Object.assign({}, config);
         delete mmConfig.server;
         let root = {

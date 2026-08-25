@@ -146,7 +146,7 @@ module.exports = class TextPrompt extends blessed.box {
         this.setContent(this.rl._prompt + this.rl.line);
     }
 
-    _updateCursor(get) {
+    _updateCursor() {
         let { cols: cx, rows: cy } = this.rl._getCursorPos();
         let pos = this._getPos();
 

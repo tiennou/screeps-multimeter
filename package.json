@@ -29,8 +29,9 @@
     "test"
   ],
   "scripts": {
-    "test": "mocha test/*",
-    "prettier": "prettier -w 'plugins/**/*.js' 'src/**/*.js' 'bin/multimeter'"
+    "eslint": "eslint --fix",
+    "prettier": "prettier -w 'plugins/**/*.js' 'src/**/*.js' 'bin/multimeter'",
+    "test": "mocha test/*"
   },
   "dependencies": {
     "blessed": "^0.1.81",
@@ -45,6 +46,9 @@
     "yaml": "^2.0.0-5"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
     "mocha": "^11.7.6",
     "prettier": "^3.9.4"
   }

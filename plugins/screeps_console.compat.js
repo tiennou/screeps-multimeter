@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 let colors = [
     '{cyan-fg}',
     '{green-fg}',
@@ -36,7 +34,7 @@ function processLogLine(line) {
     let attrs = {};
     if (rawAttrs) {
         rawAttrs.match(attrRegex1).forEach((p) => {
-            let [r, k, v] = p.match(attrRegex2) || [];
+            let [_r, k, v] = p.match(attrRegex2) || [];
             attrs[k] = v;
         });
     }

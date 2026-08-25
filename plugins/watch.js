@@ -1,5 +1,4 @@
 const blessed = require('blessed');
-const _ = require('lodash');
 
 const HELP_TEXT =
     'Monitor the result of an expression every tick. This plugin requires watch-client.js to be installed in your script.\n' +

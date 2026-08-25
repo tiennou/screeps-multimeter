@@ -6,10 +6,6 @@ const path = require('path');
 
 const DIALOG_LABEL = ' {blue-fg}Multimeter Config{/blue-fg} ';
 
-const CONFIG_DEFAULTS = {
-    plugins: [],
-};
-
 let screen = null;
 
 function message(message) {
@@ -88,7 +84,7 @@ async function loadLegacyConfig() {
     }
 }
 
-module.exports = async function (serverName) {
+module.exports = async function () {
     let umc = new UnifiedConfig();
     let [legacyPath, legacyConfig] = await loadLegacyConfig();
 

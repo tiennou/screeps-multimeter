@@ -1,5 +1,3 @@
-const blessed = require('blessed');
-
 const HELP_TEXT =
     '/filter [string]  Filter out console messages unless they contain the string.\n' +
     '/filter           Disable filtering.';

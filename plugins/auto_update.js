@@ -1,5 +1,3 @@
-// const rp = require("request-promise-native");
-const _ = require('lodash');
 const semver = require('semver');
 
 const RELEASES_URI =
