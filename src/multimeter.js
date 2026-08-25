@@ -221,22 +221,8 @@ module.exports = class Multimeter extends EventEmitter {
     }
     this.config = this.configManager.config;
 
-    // TODO: Use ScreepsAPI.fromConfig instead?
-    var opts = {};
-    opts.token = this.config.server.token || process.env.SCREEPS_TOKEN;
-    opts.protocol = this.config.server.secure ? 'https' : 'http';
-    if (this.config.server.host) opts.hostname = this.config.server.host;
-    if (this.config.server.port) opts.port = this.config.server.port;
-    if (this.config.server.path) opts.path = this.config.server.path;
-
-    this.api = new ScreepsAPI(opts);
-
-    this.console.log(`Connecting to ${serverName} (${this.api.opts.url}) ...`);
-
-    // We need to get a new token from the server if we don't already have one.
-    if (!opts.token) {
-      await this.api.auth(this.config.server.username, this.config.server.password);
-    }
+    this.console.log(`Connecting to ${serverName}...`);
+    this.api = await ScreepsAPI.fromConfig(serverName);
 
     // Automatically detect available shards
     let userInfo = await this.api.me();
